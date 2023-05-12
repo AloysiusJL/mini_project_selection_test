@@ -42,16 +42,18 @@ const theme = createTheme();
 
 export default function Register() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Add state for submitting status
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     const { confirmPassword, ...data } = values; // Exclude confirmPassword field
+
+    setIsSubmitting(true); // Set submitting status to true
 
     try {
       const response = await Axios.post("http://localhost:8000/register", data);
@@ -60,11 +62,13 @@ export default function Register() {
       navigate("/login");
     } catch (err) {
       console.error("Error registering:", err);
-      alert("Register fail");
+      alert("Registration failed. An account with this username or email already exists.");
+    } finally {
+      setIsSubmitting(false); // Set submitting status to false after receiving response
     }
   };
 
-  
+  const isSubmitDisabled = isSubmitting;
 
   return (
     <ThemeProvider theme={theme}>
@@ -197,12 +201,13 @@ export default function Register() {
                 <ErrorMessage name="confirmPassword" component="div" style={{ fontSize: '0.8rem' }} />
               </Box>
                 <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  disabled={isSubmitDisabled} // Disable button based on submitting status
                 >
-                Sign Up
+                  Sign Up
                 </Button>
                 <Grid container justifyContent="center">
                 <Grid item>

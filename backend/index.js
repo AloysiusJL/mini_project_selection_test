@@ -2,14 +2,21 @@ const express = require("express");
 const PORT = 8000;
 const app = express();
 const { db } = require("./database");
-const { authRouter } = require("./routers"); // Update the import path
+const { 
+  registerRouter,
+  loginRouter,
+  verifyRouter,
+ } = require("./routers"); // Update the import path
 const cors = require("cors");
 
 app.use(cors());
 
 app.use(express.json());
 
-app.use("/", authRouter); // Use the authRouter middleware for the "/auth" route
+app.use("/", registerRouter);
+app.use("/", loginRouter);
+app.use("/", verifyRouter);
+
 
 app.listen(PORT, () => {
   console.log(`SERVER IS RUNNING ON PORT ${PORT}`);

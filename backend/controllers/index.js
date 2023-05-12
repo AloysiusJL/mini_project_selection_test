@@ -1,5 +1,9 @@
-const authController = require("./authController")
+const registerController = require("./registerController")
+const loginController = require("./loginController")
+const verifyController = require("./verifyController")
 
 module.exports = {
-    authController
+    registerController,
+    loginController,
+    verifyController,
 }

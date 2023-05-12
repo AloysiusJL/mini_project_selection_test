@@ -1,5 +1,9 @@
-const authRouter = require("./authRouter")
+const registerRouter = require("./registerRouter")
+const loginRouter = require("./loginRouter")
+const verifyRouter = require("./verifyRouter")
 
 module.exports = {
-    authRouter
+    registerRouter,
+    loginRouter,
+    verifyRouter,
 }
