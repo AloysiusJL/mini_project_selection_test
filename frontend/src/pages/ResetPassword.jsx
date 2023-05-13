@@ -50,15 +50,18 @@ export default function ResetPassword() {
 
   const handleSubmit = async (values) => {
     const { confirmPassword, ...data } = values;
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const response = await Axios.patch(`/reset?token=${token}`, {
+      const response = await Axios.patch(`http://localhost:8000/reset-password?token=${token}`, {
         newPassword: data.password,
       });
-      console.log(response.data);
-
+  
+      console.log('Token:', token);
+      console.log('New Password:', data.password);
+      console.log('Response:', response.data);
+  
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -68,7 +71,7 @@ export default function ResetPassword() {
       });
     } catch (err) {
       console.error('Error resetting password:', err);
-
+  
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -78,7 +81,8 @@ export default function ResetPassword() {
       setIsSubmitting(false);
     }
   };
-
+  
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -96,7 +100,7 @@ export default function ResetPassword() {
           </Avatar>
           <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
             Reset Password
-          </Typography>
+            </Typography>
           <Formik
             initialValues={{
               password: '',
