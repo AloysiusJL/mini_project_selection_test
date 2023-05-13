@@ -7,6 +7,7 @@ const {
   loginRouter,
   verifyRouter,
   forgotPasswordRouter,
+  resetPasswordRouter
  } = require("./routers"); // Update the import path
 const cors = require("cors");
 
@@ -18,6 +19,7 @@ app.use("/", registerRouter);
 app.use("/", loginRouter);
 app.use("/", verifyRouter);
 app.use("/", forgotPasswordRouter);
+app.use("/", resetPasswordRouter);
 
 
 app.listen(PORT, () => {

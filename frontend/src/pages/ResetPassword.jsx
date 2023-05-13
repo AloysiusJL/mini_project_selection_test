@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import IconButton from '@mui/material/IconButton';
@@ -19,7 +19,6 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputAdornment from '@mui/material/InputAdornment';
 import Axios from 'axios';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -40,12 +39,14 @@ const theme = createTheme();
 export default function ResetPassword() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const navigate = useNavigate();
+  const location = useLocation();
+  const token = new URLSearchParams(location.search).get('token');
 
   const handleSubmit = async (values) => {
     const { confirmPassword, ...data } = values;
@@ -53,7 +54,9 @@ export default function ResetPassword() {
     setIsSubmitting(true);
 
     try {
-      const response = await Axios.post('http://localhost:8000/reset-password', data);
+      const response = await Axios.patch(`/reset?token=${token}`, {
+        newPassword: data.password,
+      });
       console.log(response.data);
 
       Swal.fire({
@@ -96,50 +99,50 @@ export default function ResetPassword() {
           </Typography>
           <Formik
             initialValues={{
-                password: '',
-                confirmPassword: '',
+              password: '',
+              confirmPassword: '',
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
-            >
+          >
             {({ isSubmitting }) => (
-                <Form noValidate>
+              <Form noValidate>
                 <Box mb={2}>
-                    <Grid item xs={12}>
+                  <Grid item xs={12}>
                     <Field
-                        as={TextField}
-                        required
-                        fullWidth
-                        name="password"
-                        label="New Password"
-                        type={showPassword ? 'text' : 'password'}
-                        id="password"
-                        autoComplete="new-password"
-                        InputProps={{
+                      as={TextField}
+                      required
+                      fullWidth
+                      name="password"
+                      label="New Password"
+                      type={showPassword ? 'text' : 'password'}
+                      id="password"
+                      autoComplete="new-password"
+                      InputProps={{
                         endAdornment: (
-                            <InputAdornment position="end">
+                          <InputAdornment position="end">
                             <IconButton
-                                onClick={handlePasswordVisibility}
-                                edge="end"
-                                aria-label="toggle password visibility"
+                              onClick={handlePasswordVisibility}
+                              edge="end"
+                              aria-label="toggle password visibility"
                             >
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
-                            </InputAdornment>
+                          </InputAdornment>
                         ),
-                        }}
+                      }}
                     />
                     <ErrorMessage
-                        name="password"
-                        component="div"
-                        style={{ fontSize: '0.8rem' }}
+                      name="password"
+                      component="div"
+                      style={{ fontSize: '0.8rem' }}
                     />
-                    </Grid>
+                  </Grid>
                 </Box>
                 <Box mb={2}>
-                    <Grid container alignItems="center">
+                  <Grid container alignItems="center">
                     <Grid item xs={12}>
-                        <Field
+                      <Field
                         as={TextField}
                         required
                         fullWidth
@@ -149,26 +152,26 @@ export default function ResetPassword() {
                         id="confirmPassword"
                         autoComplete="new-password"
                         InputProps={{
-                            endAdornment: (
+                          endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton
+                              <IconButton
                                 onClick={handlePasswordVisibility}
                                 edge="end"
                                 aria-label="toggle password visibility"
-                                >
+                              >
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
+                              </IconButton>
                             </InputAdornment>
-                            ),
+                          ),
                         }}
-                        />
+                      />
                     </Grid>
-                    </Grid>
-                    <ErrorMessage
+                  </Grid>
+                  <ErrorMessage
                     name="confirmPassword"
                     component="div"
                     style={{ fontSize: '0.8rem' }}
-                    />
+                  />
                 </Box>
                 <Button
                   type="submit"
@@ -181,18 +184,17 @@ export default function ResetPassword() {
                   Reset Password
                 </Button>
                 <Grid container justifyContent="center">
-                    <Grid item>
+                  <Grid item>
                     <Link component={RouterLink} to="/login" variant="body2">
-                        Back to Login
+                      Back to Login
                     </Link>
-                    </Grid>
+                  </Grid>
                 </Grid>
-                </Form>
+              </Form>
             )}
-            </Formik>
+          </Formik>
         </Box>
       </Container>
     </ThemeProvider>
   );
 }
-
