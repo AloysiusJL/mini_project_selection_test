@@ -26,13 +26,12 @@ const validationSchema = Yup.object().shape({
 const theme = createTheme();
 
 export default function ForgotPassword() {
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  const handleSubmit = async (values) => {
-    setIsSubmitting(true);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setSubmitting(true);
 
     try {
-      const response = await Axios.post('http://localhost:8000/forgot-password', values);
+      const { email } = values;
+      const response = await Axios.post('http://localhost:8000/forgot-password', { email });
       console.log(response.data);
 
       Swal.fire({
@@ -49,7 +48,7 @@ export default function ForgotPassword() {
         text: 'Failed to send reset password link. Please try again.',
       });
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
@@ -107,11 +106,7 @@ export default function ForgotPassword() {
                   disabled={isSubmitting}
                   startIcon={isSubmitting && <CircularProgress size={20} />}
                 >
-                  {isSubmitting ? (
-                    <CircularProgress size={20} color="inherit" />
-                  ) : (
-                    'Reset Password'
-                  )}
+                  {isSubmitting ? 'Submitting...' : 'Reset Password'}
                 </Button>
                 <Grid container justifyContent="center">
                   <Grid item>
@@ -119,7 +114,7 @@ export default function ForgotPassword() {
                       Back to Login
                     </Link>
                   </Grid>
-                </Grid>
+                  </Grid>
               </Form>
             )}
           </Formik>
