@@ -22,7 +22,8 @@ module.exports = {
       const updateUserQuery = "UPDATE users SET is_verified = 1 WHERE username = ?";
       await query(updateUserQuery, [username]);
 
-      return res.redirect("http://localhost:8000/login");
+      console.log("User verified successfully");
+      return res.status(200).send({ message: "User verified successfully" });
     } catch (error) {
       console.error("Error verifying token:", error);
       return res.status(500).send({ message: "Internal server error" });

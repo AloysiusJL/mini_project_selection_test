@@ -20,6 +20,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Axios from "axios";
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 const validationSchema = Yup.object().shape({
@@ -57,16 +60,30 @@ export default function Register() {
 
     try {
       const response = await Axios.post("http://localhost:8000/register", data);
-      console.log(response.data);
-      alert("Register success");
+    console.log(response.data);
+
+    // Show success notification
+    Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Registration successful',
+    }).then(() => {
       navigate("/login");
-    } catch (err) {
-      console.error("Error registering:", err);
-      alert("Registration failed. An account with this username or email already exists.");
-    } finally {
-      setIsSubmitting(false); // Set submitting status to false after receiving response
-    }
-  };
+    });
+  } catch (err) {
+    console.error("Error registering:", err);
+
+    // Show error notification
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Registration failed. An account with this username or email already exists.',
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const isSubmitDisabled = isSubmitting;
 
@@ -99,7 +116,8 @@ export default function Register() {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            <Form noValidate>
+           {({ isSubmitting }) => (
+              <Form noValidate>
               <Box mb={2}>
                 <Grid item xs={12}>
                   <Field
@@ -200,14 +218,15 @@ export default function Register() {
                 </Grid>
                 <ErrorMessage name="confirmPassword" component="div" style={{ fontSize: '0.8rem' }} />
               </Box>
-                <Button
+              <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  disabled={isSubmitDisabled} // Disable button based on submitting status
+                  disabled={isSubmitting}
+                  startIcon={isSubmitting && <CircularProgress size={20} />}
                 >
-                  Sign Up
+                  {isSubmitting ? 'Signing Up...' : 'Sign Up'}
                 </Button>
                 <Grid container justifyContent="center">
                 <Grid item>
@@ -217,6 +236,7 @@ export default function Register() {
                 </Grid>
                 </Grid>
                 </Form>
+                )}
                 </Formik>
                 </Box>
                 <Box mt={5}>

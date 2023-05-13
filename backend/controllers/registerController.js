@@ -54,7 +54,7 @@ module.exports = {
       },
     });
 
-    const verificationLink = `http://localhost:8000/verification?token=${verificationToken}`;
+    const verificationLink = `http://localhost:3000/verification?token=${verificationToken}`;
 
     const mailOptions = {
       from: "aloysiuspurwadhika@gmail.com",
