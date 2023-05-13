@@ -6,6 +6,7 @@ const {
   registerRouter,
   loginRouter,
   verifyRouter,
+  forgotPasswordRouter,
  } = require("./routers"); // Update the import path
 const cors = require("cors");
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/", registerRouter);
 app.use("/", loginRouter);
 app.use("/", verifyRouter);
+app.use("/", forgotPasswordRouter);
 
 
 app.listen(PORT, () => {
