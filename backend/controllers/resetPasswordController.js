@@ -7,7 +7,7 @@ module.exports = {
     const { newPassword } = req.body;
 
     try {
-      const selectUserQuery = "SELECT username, password FROM users WHERE verification_token = ?";
+      const selectUserQuery = "SELECT username, password FROM users WHERE reset_password_token = ?";
       const [user] = await query(selectUserQuery, [token]);
 
       if (!user) {

@@ -3,13 +3,24 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { scrtk } = require("../confiq");
 
+const util = require("util");
+const queryAsync = util.promisify(query).bind(db);
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "aloysiuspurwadhika@gmail.com",
+    pass: "dqowfzwvjafiefwq",
+  },
+});
+
 module.exports = {
   forgotPassword: async (req, res) => {
-    const { email } = req.body;
-
     try {
-      const getEmailQuery = `SELECT username FROM users WHERE email = ${db.escape(email)}`;
-      const isEmailExist = await query(getEmailQuery);
+      const { email } = req.body;
+
+      const getEmailQuery = `SELECT username FROM users WHERE email = ?`;
+      const isEmailExist = await queryAsync(getEmailQuery, [email]);
 
       if (isEmailExist.length === 0) {
         console.log("Email not found:", email);
@@ -23,15 +34,16 @@ module.exports = {
       };
 
       const resetPasswordToken = generateResetPasswordToken(email);
-      const resetPasswordLink = `http://localhost:3000/reset-password?token=${resetPasswordToken}`;
 
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: "aloysiuspurwadhika@gmail.com",
-          pass: "dqowfzwvjafiefwq",
-        },
-      });
+      const sql = `UPDATE users SET reset_password_token = ? WHERE email = ?`;
+      const values = [resetPasswordToken, email];
+
+      const addResetToken = await queryAsync(sql, values);
+      if (addResetToken.affectedRows === 0) {
+        return res.status(500).json({ message: "Failed to update reset password token. Please try again." });
+      }
+
+      const resetPasswordLink = `http://localhost:3000/reset-password?token=${resetPasswordToken}`;
 
       const mailOptions = {
         from: "aloysiuspurwadhika@gmail.com",
@@ -51,7 +63,6 @@ module.exports = {
       });
     } catch (error) {
       console.error("Error retrieving email:", error);
-      console.log("Email:", email);
       return res.status(500).json({ message: "Failed to retrieve email. Please try again." });
     }
   },

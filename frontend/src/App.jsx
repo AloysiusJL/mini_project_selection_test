@@ -6,14 +6,15 @@ import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyAccount from "./pages/Verify"
 import ForgotPassword from "./pages/ForgotPassword";
-import WelcomeCard from "./components/Welcome";
+// import WelcomeCard from "./components/Welcome";
+import HomePage from "./pages/Home";
 
 function App() {
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<WelcomeCard />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
