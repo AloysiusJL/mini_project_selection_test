@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import IconButton from '@mui/material/IconButton';
@@ -189,7 +189,11 @@ export default function ResetPassword() {
                 </Button>
                 <Grid container justifyContent="center">
                   <Grid item>
-                    <Link component={RouterLink} to="/login" variant="body2">
+                    <Link 
+                    component="button" 
+                    variant="body2"
+                    onClick={() => navigate('/login')}
+                    >
                       Back to Login
                     </Link>
                   </Grid>

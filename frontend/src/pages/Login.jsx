@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../components/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -15,7 +17,6 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
@@ -23,33 +24,43 @@ import Swal from 'sweetalert2';
 const theme = createTheme();
 
 export default function Login() {
+  const { setLoggedIn, setUsername, setToken } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       setSubmitting(true);
-  
+
       const { email, password } = values;
       console.log('Email or Username:', email);
       console.log('Password:', password);
-  
+
       const response = await Axios.post('http://localhost:8000/login', {
         usernameOrEmail: email,
-        password: password
+        password: password,
       });
-  
+
       console.log('Login Response:', response.data);
-  
+
       // Perform any desired actions after successful login
-  
+      setLoggedIn(true);
+      setUsername(response.data.username);
+      setToken(response.data.token);
+
       Swal.fire({
         icon: 'success',
         title: 'Success',
         text: 'Logged in successfully',
+      }).then(() => {
+        localStorage.setItem('loggedIn', true);
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('token', response.data.token);
+        navigate('/'); // Navigate to home page
       });
     } catch (err) {
       console.error('Error logging in:', err);
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -58,7 +69,7 @@ export default function Login() {
     } finally {
       setSubmitting(false);
     }
-  };  
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -101,7 +112,6 @@ export default function Login() {
                 <Field
                   as={TextField}
                   margin="normal"
-                  required
                   fullWidth
                   name="password"
                   label="Password"
@@ -140,12 +150,20 @@ export default function Login() {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link component={RouterLink} to="/forgot-password" variant="body2">
+                    <Link
+                      component="button"
+                      variant="body2"
+                      onClick={() => navigate('/forgot-password')}
+                    >
                       Forgot password?
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link component={RouterLink} to="/register" variant="body2">
+                    <Link
+                      component="button"
+                      variant="body2"
+                      onClick={() => navigate('/register')}
+                    >
                       Don't have an account? Sign up
                     </Link>
                   </Grid>
@@ -168,3 +186,4 @@ export default function Login() {
     </ThemeProvider>
   );
 }
+
