@@ -16,6 +16,7 @@ import Axios from 'axios';
 import Swal from 'sweetalert2';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -27,6 +28,16 @@ const theme = createTheme();
 
 export default function ForgotPassword() {
   const navigate = useNavigate()
+
+
+  useEffect(() => {
+    const isLoginLocal = localStorage.getItem('loggedIn');
+
+    if (isLoginLocal === 'true') {
+      navigate('/');
+    }
+  }, [navigate]);
+
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);

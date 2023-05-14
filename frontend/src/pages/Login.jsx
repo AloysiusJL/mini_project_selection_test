@@ -28,6 +28,14 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();  
 
+  useEffect(() => {
+    const isLoginLocal = localStorage.getItem('loggedIn');
+
+    if (isLoginLocal === 'true') {
+      navigate('/');
+    }
+  }, [navigate]);
+
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       setSubmitting(true);

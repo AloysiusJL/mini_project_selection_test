@@ -6,9 +6,27 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import Grid from '@mui/material/Grid';
+import Axios from 'axios';
 
 const ContentCard = ({ post }) => {
   const { username, media, createdDate, likes, caption } = post;
+
+  const usernameLocal = localStorage.getItem('username');
+  const usernameStr = usernameLocal.toString()
+
+  const handleLike = async () => {
+    try {
+      const response = await Axios.post('http://localhost:8000/like', {
+        image: media.toString(), // Pass the 'media' value as 'image'
+        usernameOrEmail: usernameStr, // Pass the 'usernameLocal' value as 'usernameOrEmail'
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error giving like', error);
+      console.log(usernameStr)
+      console.log(media)
+    }
+  };  
 
   // Construct the image URL
 
@@ -52,7 +70,7 @@ const ContentCard = ({ post }) => {
           </Grid>
           <Grid item xs={4} container justifyContent="flex-end">
             {/* Like and Comment Buttons */}
-            <IconButton>
+            <IconButton onClick={handleLike}>
               <FavoriteIcon />
             </IconButton>
             <IconButton>

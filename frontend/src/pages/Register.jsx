@@ -22,6 +22,7 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useEffect } from 'react';
 
 
 
@@ -52,6 +53,16 @@ export default function Register() {
   };
 
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const isLoginLocal = localStorage.getItem('loggedIn');
+
+    if (isLoginLocal === 'true') {
+      navigate('/');
+    }
+  }, [navigate]);
+
 
   const handleSubmit = async (values) => {
     const { confirmPassword, ...data } = values; // Exclude confirmPassword field

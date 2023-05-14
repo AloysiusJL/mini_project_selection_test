@@ -8,6 +8,7 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NewPost from '../components/NewPost';
 import Welcome from '../components/Welcome';
+import DummyUserProfile from './ProfilePage';
 import ContentCard from '../components/ContentCard';
 
 export default function Home() {
@@ -52,6 +53,10 @@ export default function Home() {
 
   const handleHomeClick = () => {
     setCurrentPage('home');
+  };
+
+  const handleProfileClick = () => {
+    setCurrentPage('profile');
   };
 
   return (
@@ -118,14 +123,7 @@ export default function Home() {
                   variant="outlined"
                   size="large"
                   fullWidth
-                  onClick={() => {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('loggedIn');
-                    setLoggedIn(false);
-                    setToken('');
-                    setUsername('');
-                    }}
+                  onClick={handleProfileClick}
                 >
                   Profile
                 </Button>
@@ -152,6 +150,19 @@ export default function Home() {
             >
               <Grid item xs={12} sm={6} md={4}>
                 <NewPost />
+              </Grid>
+            </Grid>
+          )}
+
+          {currentPage === 'profile' &&(
+            <Grid 
+              container
+              justifyContent="center"
+              alignItems="center"
+              sx={{ Height: '50vh' }}
+            >
+              <Grid item xs={12} sm={6} md={4}>
+                <DummyUserProfile />
               </Grid>
             </Grid>
           )}
