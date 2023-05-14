@@ -11,6 +11,7 @@ const {
   newPostRouter,
   getPosrRouter,
   likeRouter,
+  userProfileRouter
  } = require("./routers"); // Update the import path
 const cors = require("cors");
 
@@ -26,6 +27,8 @@ app.use("/", resetPasswordRouter);
 app.use("/", newPostRouter);
 app.use("/", getPosrRouter);
 app.use("/", likeRouter);
+app.use("/", userProfileRouter);
+
 
 
 app.listen(PORT, () => {

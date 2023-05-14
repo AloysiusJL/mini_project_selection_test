@@ -6,6 +6,7 @@ const resetPasswordController = require("./resetPasswordController")
 const newPostController = require("./newPostController")
 const getPostController = require("./getPostController")
 const likeController = require("./likeController")
+const userProfileController = require("./userProfileController")
 
 module.exports = {
     registerController,
@@ -16,4 +17,5 @@ module.exports = {
     newPostController,
     getPostController,
     likeController,
+    userProfileController,
 }

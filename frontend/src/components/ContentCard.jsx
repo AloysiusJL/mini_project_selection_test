@@ -12,18 +12,17 @@ const ContentCard = ({ post }) => {
   const { username, media, createdDate, likes, caption } = post;
 
   const usernameLocal = localStorage.getItem('username');
-  const usernameStr = usernameLocal.toString()
 
   const handleLike = async () => {
     try {
       const response = await Axios.post('http://localhost:8000/like', {
         image: media.toString(), // Pass the 'media' value as 'image'
-        usernameOrEmail: usernameStr, // Pass the 'usernameLocal' value as 'usernameOrEmail'
+        usernameOrEmail: usernameLocal, // Pass the 'usernameLocal' value as 'usernameOrEmail'
       });
       console.log(response.data);
     } catch (error) {
       console.error('Error giving like', error);
-      console.log(usernameStr)
+      console.log(usernameLocal)
       console.log(media)
     }
   };  

@@ -8,44 +8,38 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NewPost from '../components/NewPost';
 import Welcome from '../components/Welcome';
-import DummyUserProfile from './ProfilePage';
 import ContentCard from '../components/ContentCard';
+import UserProfileCard from '../components/UserProfileCard';
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState('home');
   const { loggedIn, username, token, setLoggedIn, setUsername, setToken } = useContext(AuthContext);
-
-  console.log('loggedIn:', loggedIn); // Add this line to log the value
-  console.log('username:', username); // Add this line to log the value
-  console.log('token:', token); // Add this line to log the value
+  const [data, setData] = useState({}); // Initialize data state
 
 
   useEffect(() => {
-    const usernameLocal = localStorage.getItem('username')
-    const isLoginLocal = localStorage.getItem('loggedIn')
-    if(usernameLocal !== null) setUsername(usernameLocal)
-    if(isLoginLocal !== null) setLoggedIn(true)
-  }, [])
-
+    const usernameLocal = localStorage.getItem('username');
+    const isLoginLocal = localStorage.getItem('loggedIn');
+    if (usernameLocal !== null) setUsername(usernameLocal);
+    if (isLoginLocal !== null) setLoggedIn(true);
+  }, []);
 
   // Dummy data for posts
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/');
+        const response = await axios.get('http://localhost:8000/posts');
         const responseData = response.data;
         setPosts(responseData);
       } catch (error) {
         console.error('Error retrieving posts:', error);
       }
     };
-  
+
     fetchPosts();
-  }, []);  
-  
+  }, []);
 
   const handlePostClick = () => {
     setCurrentPage('post');
@@ -55,9 +49,28 @@ export default function Home() {
     setCurrentPage('home');
   };
 
-  const handleProfileClick = () => {
+  const handleProfileClick = async () => {
     setCurrentPage('profile');
+    try {
+      const response = await axios.get(`http://localhost:8000/profile?usernameOrEmail=${username}`);
+      const responseData = response.data;
+  
+      const userProfile = {
+        profilePicture: responseData.profilePicture,
+        fullName: responseData.fullName,
+        bio: responseData.bio,
+        username: responseData.username,
+        email: responseData.email,
+      };
+  
+      setData(userProfile);
+  
+      console.log(userProfile);
+    } catch (error) {
+      console.error('Error retrieving user profile', error);
+    }
   };
+  
 
   return (
     <>
@@ -154,15 +167,15 @@ export default function Home() {
             </Grid>
           )}
 
-          {currentPage === 'profile' &&(
-            <Grid 
+          {currentPage === 'profile' && (
+            <Grid
               container
               justifyContent="center"
               alignItems="center"
               sx={{ Height: '50vh' }}
             >
               <Grid item xs={12} sm={6} md={4}>
-                <DummyUserProfile />
+                <UserProfileCard {...data} />
               </Grid>
             </Grid>
           )}

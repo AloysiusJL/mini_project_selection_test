@@ -6,6 +6,7 @@ const resetPasswordRouter = require("./resetPasswordRouter")
 const newPostRouter = require("./newPostRouter")
 const getPosrRouter = require("./getPostRouter")
 const likeRouter = require("./likeRouter")
+const userProfileRouter = require("./userProfileRouter")
 
 module.exports = {
     registerRouter,
@@ -16,4 +17,5 @@ module.exports = {
     newPostRouter,
     getPosrRouter,
     likeRouter,
+    userProfileRouter,
 }
