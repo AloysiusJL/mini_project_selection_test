@@ -7,19 +7,43 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NewPost from '../components/NewPost';
 import Welcome from '../components/Welcome';
+import ContentCard from '../components/ContentCard';
 
 export default function Home() {
-  const [showNewPost, setShowNewPost] = useState(false);
+  const [curentPage, setCurentPage] = useState('home');
   const { loggedIn, username, token, setLoggedIn, setUsername, setToken } = useContext(AuthContext);
 
   console.log('loggedIn:', loggedIn); // Add this line to log the value
   console.log('username:', username); // Add this line to log the value
   console.log('token:', token); // Add this line to log the value
 
+  // Dummy data for posts
+  const posts = [
+    {
+      id: 1,
+      username: 'user1',
+      media: 'https://nurserynisarga.in/wp-content/uploads/2019/10/Red-Rose.jpg',
+      createdDate: '2023-05-15',
+      likes: 10,
+    },
+    {
+      id: 2,
+      username: 'user2',
+      media: 'https://w0.peakpx.com/wallpaper/123/54/HD-wallpaper-scenery-lake-nature-sky-tree-water.jpg',
+      createdDate: '2023-05-16',
+      likes: 5,
+    },
+    // Add more posts as needed
+  ];
 
   const handlePostClick = () => {
-    setShowNewPost(true);
+    setCurentPage('post');
   };
+
+
+  const handleHomeClick = () => {
+    setCurentPage('home')
+  }
 
   return (
     <>
@@ -46,6 +70,7 @@ export default function Home() {
               backgroundColor: '#ffffff',
               mb: '0px',
               mt: '0px',
+              width: '100vw'
             }}
           >
             <Grid
@@ -55,12 +80,14 @@ export default function Home() {
               alignItems="center"
               spacing={2}
             >
+              {/* Navigation Buttons */}
               <Grid item xs={4} sx={{ mb: 2 }}>
                 <Button
                   startIcon={<HomeIcon sx={{ fontSize: 28 }} />}
                   variant="outlined"
                   size="large"
                   fullWidth
+                  onClick={handleHomeClick}
                 >
                   Home
                 </Button>
@@ -88,18 +115,20 @@ export default function Home() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: '-15vh',
-            }}
-          >
-            {showNewPost && <NewPost />}
-          </Grid>
+          {/* Render content based on currentPage */}
+          {curentPage === 'home' && (
+            <>
+              {posts.map((post) => (
+                <Grid item key={post.id} xs={12} sm={6} md={4}>
+                  <ContentCard post={post} />
+                </Grid>
+              ))}
+            </>
+          )}
+
+          {curentPage === 'post' && (
+            <NewPost />
+          )}
         </Grid>
       )}
     </>
