@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 import { AuthContext } from '../components/AuthContext';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -10,40 +11,48 @@ import Welcome from '../components/Welcome';
 import ContentCard from '../components/ContentCard';
 
 export default function Home() {
-  const [curentPage, setCurentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState('home');
   const { loggedIn, username, token, setLoggedIn, setUsername, setToken } = useContext(AuthContext);
 
   console.log('loggedIn:', loggedIn); // Add this line to log the value
   console.log('username:', username); // Add this line to log the value
   console.log('token:', token); // Add this line to log the value
 
+
+  useEffect(() => {
+    const usernameLocal = localStorage.getItem('username')
+    const isLoginLocal = localStorage.getItem('loggedIn')
+    if(usernameLocal !== null) setUsername(usernameLocal)
+    if(isLoginLocal !== null) setLoggedIn(true)
+  }, [])
+
+
   // Dummy data for posts
-  const posts = [
-    {
-      id: 1,
-      username: 'user1',
-      media: 'https://nurserynisarga.in/wp-content/uploads/2019/10/Red-Rose.jpg',
-      createdDate: '2023-05-15',
-      likes: 10,
-    },
-    {
-      id: 2,
-      username: 'user2',
-      media: 'https://w0.peakpx.com/wallpaper/123/54/HD-wallpaper-scenery-lake-nature-sky-tree-water.jpg',
-      createdDate: '2023-05-16',
-      likes: 5,
-    },
-    // Add more posts as needed
-  ];
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/');
+        const responseData = response.data;
+        setPosts(responseData);
+      } catch (error) {
+        console.error('Error retrieving posts:', error);
+      }
+    };
+  
+    fetchPosts();
+  }, []);  
+  
 
   const handlePostClick = () => {
-    setCurentPage('post');
+    setCurrentPage('post');
   };
 
-
   const handleHomeClick = () => {
-    setCurentPage('home')
-  }
+    setCurrentPage('home');
+  };
 
   return (
     <>
@@ -64,13 +73,13 @@ export default function Home() {
             item
             xs={12}
             sx={{
-              position: 'sticky',
+              position: 'fixed',
               top: 0,
               zIndex: 1,
               backgroundColor: '#ffffff',
               mb: '0px',
               mt: '0px',
-              width: '100vw'
+              width: '100vw',
             }}
           >
             <Grid
@@ -109,6 +118,14 @@ export default function Home() {
                   variant="outlined"
                   size="large"
                   fullWidth
+                  onClick={() => {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('loggedIn');
+                    setLoggedIn(false);
+                    setToken('');
+                    setUsername('');
+                    }}
                 >
                   Profile
                 </Button>
@@ -116,7 +133,7 @@ export default function Home() {
             </Grid>
           </Grid>
           {/* Render content based on currentPage */}
-          {curentPage === 'home' && (
+          {currentPage === 'home' && (
             <>
               {posts.map((post) => (
                 <Grid item key={post.id} xs={12} sm={6} md={4}>
@@ -126,8 +143,17 @@ export default function Home() {
             </>
           )}
 
-          {curentPage === 'post' && (
-            <NewPost />
+          {currentPage === 'post' && (
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="start"
+              sx={{ Height: '50vh' }}
+            >
+              <Grid item xs={12} sm={6} md={4}>
+                <NewPost />
+              </Grid>
+            </Grid>
           )}
         </Grid>
       )}

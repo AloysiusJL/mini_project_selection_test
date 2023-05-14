@@ -8,7 +8,9 @@ import CommentIcon from '@mui/icons-material/Comment';
 import Grid from '@mui/material/Grid';
 
 const ContentCard = ({ post }) => {
-  const { username, media, createdDate, likes } = post;
+  const { username, media, createdDate, likes, caption } = post;
+
+  // Construct the image URL
 
   return (
     <Card variant="outlined">
@@ -27,7 +29,7 @@ const ContentCard = ({ post }) => {
         }}
       >
         <img
-          src={media}
+          src={require(`../image/${media}`)}
           alt="Post Media"
           style={{
             position: 'absolute',
@@ -56,6 +58,12 @@ const ContentCard = ({ post }) => {
             <IconButton>
               <CommentIcon />
             </IconButton>
+          </Grid>
+          <Grid item xs={12}>
+            {/* Caption */}
+            <Typography variant="body1" gutterBottom>
+              {caption}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
             {/* Created Date */}

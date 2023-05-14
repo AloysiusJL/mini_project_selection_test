@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../components/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
@@ -17,16 +17,16 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 
 const theme = createTheme();
 
 export default function Login() {
-  const { setLoggedIn, setUsername, setToken } = useContext(AuthContext);
+  const { loggedIn, username, token, setLoggedIn, setUsername, setToken } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -54,8 +54,7 @@ export default function Login() {
         text: 'Logged in successfully',
       }).then(() => {
         localStorage.setItem('loggedIn', true);
-        localStorage.setItem('username', response.data.username);
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', email)
         navigate('/'); // Navigate to home page
       });
     } catch (err) {

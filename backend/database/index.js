@@ -23,6 +23,7 @@ db.connect((err) => {
               verification_token VARCHAR(255),
               reset_password_token VARCHAR(255),
               bio TEXT,
+              profile_pic varchar(255),
               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
               updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )`,

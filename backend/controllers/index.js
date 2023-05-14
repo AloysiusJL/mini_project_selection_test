@@ -4,6 +4,7 @@ const verifyController = require("./verifyController")
 const forgotPasswordController = require("./forgotPasswordController")
 const resetPasswordController = require("./resetPasswordController")
 const newPostController = require("./newPostController")
+const getPostController = require("./getPostController")
 
 module.exports = {
     registerController,
@@ -11,5 +12,6 @@ module.exports = {
     verifyController,
     forgotPasswordController,
     resetPasswordController,
-    newPostController
+    newPostController,
+    getPostController,
 }

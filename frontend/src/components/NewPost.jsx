@@ -57,7 +57,7 @@ export default function NewPost(){
   };
 
   return (
-    <Container>
+    <Container style={{height: '100vh', marginTop: '-25%'}}>
       <input
         type="file"
         accept="image/*"
@@ -80,6 +80,7 @@ export default function NewPost(){
         margin="normal"
         value={caption}
         onChange={(event) => setCaption(event.target.value)}
+        style={{width: '25vw', height: 'auto'}}
       />
 
       <Button variant="contained" onClick={handlePost} disabled={isLoading}>
