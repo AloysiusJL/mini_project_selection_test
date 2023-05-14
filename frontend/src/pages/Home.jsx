@@ -13,6 +13,9 @@ export default function Home() {
   const { loggedIn, username, token, setLoggedIn, setUsername, setToken } = useContext(AuthContext);
 
   console.log('loggedIn:', loggedIn); // Add this line to log the value
+  console.log('username:', username); // Add this line to log the value
+  console.log('token:', token); // Add this line to log the value
+
 
   const handlePostClick = () => {
     setShowNewPost(true);

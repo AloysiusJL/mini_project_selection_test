@@ -45,7 +45,7 @@ export default function Login() {
 
       // Perform any desired actions after successful login
       setLoggedIn(true);
-      setUsername(response.data.username);
+      setUsername(email);
       setToken(response.data.token);
 
       Swal.fire({
@@ -186,4 +186,3 @@ export default function Login() {
     </ThemeProvider>
   );
 }
-

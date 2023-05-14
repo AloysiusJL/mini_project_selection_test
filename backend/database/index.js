@@ -17,7 +17,7 @@ db.connect((err) => {
               id INT AUTO_INCREMENT PRIMARY KEY,
               email VARCHAR(255) UNIQUE NOT NULL,
               username VARCHAR(255) UNIQUE NOT NULL,
-              fullName VARCHAR(255) NOT NULL,
+              fullName VARCHAR(255) NOT NULL, 
               password VARCHAR(255) NOT NULL,
               is_verified BOOLEAN DEFAULT FALSE,
               verification_token VARCHAR(255),
@@ -32,7 +32,7 @@ db.connect((err) => {
             value: `CREATE TABLE IF NOT EXISTS Posts (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT,
-                media_url VARCHAR(255) NOT NULL,
+                image VARCHAR(255) NOT NULL,
                 caption TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
