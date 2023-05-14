@@ -22,10 +22,22 @@ module.exports = {
       const { username, caption } = req.body;
 
       try {
-        // Get the user ID from the Users table based on the username
-        const userQuery = `SELECT id FROM users WHERE username = '${username}'`;
+        let userId;
+        let queryField;
+
+        // Check if the username is an email or username
+        if (username.includes("@")) {
+          // It's an email, query using email
+          queryField = "email";
+        } else {
+          // It's a username, query using username
+          queryField = "username";
+        }
+
+        // Get the user ID from the Users table based on the username or email
+        const userQuery = `SELECT id FROM users WHERE ${queryField} = ?`;
         console.log("userQuery:", userQuery); // Log the query string
-        const [userRows] = await query(userQuery);
+        const [userRows] = await query(userQuery, [username]);
 
         console.log("userRows:", userRows);
 
@@ -33,7 +45,7 @@ module.exports = {
           return res.status(404).json({ error: "User not found" });
         }
 
-        const userId = userRows.id;
+        userId = userRows.id;
 
         // Access the uploaded file using req.file
         const image = req.file.filename;
