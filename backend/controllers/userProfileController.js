@@ -1,4 +1,17 @@
 const { db, query } = require("../database");
+const multer = require("multer");
+const path = require("path");
+
+
+const storage = multer.diskStorage({
+  destination: path.resolve(__dirname, "../../frontend/src/image"),
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage }).single("image");
+
 
 module.exports = {
   getUserProfile: async (req, res) => {
@@ -33,4 +46,18 @@ module.exports = {
       return res.status(500).json({ message: "Internal server error" });
     }
   },
+
+  newUserProfile: async (req, res) => {
+    const { username, fullName, bio, localUsername } = req.body;
+  
+    const updateProfileQuery = `UPDATE users SET username = '${username}', fullName = '${fullName}', bio = '${bio}' WHERE username = '${localUsername}'`;
+  
+    try {
+      await query(updateProfileQuery);
+      return res.status(200).json({ message: "User profile updated successfully" });
+    } catch (error) {
+      console.error("Error updating user profile", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }  
 };

@@ -27,10 +27,22 @@ export default function Home() {
   // Dummy data for posts
   const [posts, setPosts] = useState([]);
 
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/');
+      const responseData = response.data;
+      setPosts(responseData);
+    } catch (error) {
+      console.error('Error retrieving posts:', error);
+    }
+  };
+
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/posts');
+        const response = await axios.get('http://localhost:8000/');
         const responseData = response.data;
         setPosts(responseData);
       } catch (error) {
@@ -47,6 +59,7 @@ export default function Home() {
 
   const handleHomeClick = () => {
     setCurrentPage('home');
+    fetchPosts();
   };
 
   const handleProfileClick = async () => {
