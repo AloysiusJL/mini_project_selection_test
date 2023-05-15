@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import HomeIcon from '@mui/icons-material/Home';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 import NewPost from '../components/NewPost';
 import Welcome from '../components/Welcome';
 import ContentCard from '../components/ContentCard';
@@ -83,7 +84,15 @@ export default function Home() {
       console.error('Error retrieving user profile', error);
     }
   };
-  
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setUsername('');
+    setToken('');
+    localStorage.removeItem('username');
+    localStorage.removeItem('loggedIn');
+    setCurrentPage('home');
+  };
 
   return (
     <>
@@ -189,6 +198,15 @@ export default function Home() {
             >
               <Grid item xs={12} sm={6} md={4}>
                 <UserProfileCard {...data} />
+                <Button
+                  startIcon={<LogoutIcon />}
+                  variant="outlined"
+                  size="large"
+                  fullWidth
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
               </Grid>
             </Grid>
           )}

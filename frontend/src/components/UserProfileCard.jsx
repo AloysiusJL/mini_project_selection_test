@@ -40,11 +40,10 @@ const UserProfileCard = ({ profilePicture, fullName, bio, username, email }) => 
         localUsername: localStorage.getItem('username')
       };
   
-      setTmpUserName(username);
-  
       const response = await Axios.patch('http://localhost:8000/profile', updatedProfile);
       // Assuming the server responds with a success message
-      localStorage.setItem('username', tmpUserName);
+  
+      localStorage.setItem('username', editedUsername); // Update the username in local storage
       console.log(response.data.message);
   
       setEditMode(false);
@@ -69,8 +68,7 @@ const UserProfileCard = ({ profilePicture, fullName, bio, username, email }) => 
         confirmButtonText: 'OK'
       });
     }
-  };
-  
+  };  
   
   
 

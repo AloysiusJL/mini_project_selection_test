@@ -7,6 +7,7 @@ const newPostRouter = require("./newPostRouter")
 const getPosrRouter = require("./getPostRouter")
 const likeRouter = require("./likeRouter")
 const userProfileRouter = require("./userProfileRouter")
+const getUserPostRouter = require("./getUserPostRouter")
 
 module.exports = {
     registerRouter,
@@ -18,4 +19,5 @@ module.exports = {
     getPosrRouter,
     likeRouter,
     userProfileRouter,
+    getUserPostRouter,
 }

@@ -9,16 +9,16 @@ module.exports = {
       const [userRow] = await query(getUserQuery, [usernameOrEmail, usernameOrEmail]);
       const userId = userRow?.id;
 
-      const checkLikeQuery = `SELECT * FROM likes WHERE user_id = ${userId}`;
-      const [likeRows] = await query(checkLikeQuery);
+      const getPostIdQuery = `SELECT id FROM posts WHERE image = ?`;
+      const [postRow] = await query(getPostIdQuery, [image]);
+      const postId = postRow?.id;
 
-      if (!likeRows) {
-        const getPostIdQuery = `SELECT id FROM posts WHERE image = '${image}'`;
-        const [postRow] = await query(getPostIdQuery);
-        const postId = postRow?.id;
+      const checkLikeQuery = `SELECT * FROM likes WHERE user_id = ? AND post_id = ?`;
+      const [likeRow] = await query(checkLikeQuery, [userId, postId]);
 
-        const insertLikeQuery = `INSERT INTO likes (user_id, post_id) VALUES (${userId}, ${postId})`;
-        await query(insertLikeQuery);
+      if (!likeRow) {
+        const insertLikeQuery = `INSERT INTO likes (user_id, post_id) VALUES (?, ?)`;
+        await query(insertLikeQuery, [userId, postId]);
 
         console.log(postId);
         console.log(userId);
